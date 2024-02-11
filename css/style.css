@@ -14,3 +14,50 @@ body {
     max-width: 1200px;
     margin: auto;
 }
+#search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0 200px;
+    border-radius: 0 0 40px 40px;
+    background: linear-gradient(
+       13deg,
+        var(--color-primary) 47%,
+        var(--color-secondary) 100%
+    );
+    box-shadow: var(--color-secondary) 0px 20px 100px 0px;
+}
+#location {
+    width: 45px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+}
+#location:hover {
+    scale: 1.3;
+}
+#search input {
+    width: 300px;
+    height: 35px;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    color: var(--color-primary);
+    border-radius: 10px 0 0 10px;
+}
+#search input:focus {
+    outline: none;
+}
+#search button {
+    height: 35px;
+    border: none;
+    padding: 10px;
+    background-color: var(--color-warning);
+    border-radius: 0 10px 10px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+}
+#search button:hover {
+    color: var(--color-primary);
+}

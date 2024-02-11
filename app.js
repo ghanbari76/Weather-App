@@ -23,8 +23,8 @@ const renderCurrentWeather = (data) => {
             <p>${Math.round(data.main.temp)} °C </p>
         </div>
         <div id="info">
-            <p>Humidity: <span>${data.main.humidity} % </span></p>
-            <p>Wind Speed: <span>${data.wind.speed} m/s </span></p>
+            <p>Humidity : <span>${data.main.humidity} % </span></p>
+            <p>Wind Speed : <span>${data.wind.speed} m/s </span></p>
         </div>
     `;
 

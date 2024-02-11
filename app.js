@@ -4,6 +4,7 @@ const API_KEY = "dae9eb3d2c2c91dada0e72afd4792469";
 const searchInput = document.querySelector("input");
 const searchButton = document.querySelector("button");
 const weatherContainer = document.getElementById("weather");
+const locationIcon = document.getElementById("location");
 
 const getCurrentWeatherByName = async (city) => {
     const url = `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`;
@@ -12,9 +13,14 @@ const getCurrentWeatherByName = async (city) => {
     return json;
 };
 
-const renderCurrentWeather = (data) => {
-    console.log(data);
+const getCurrentWeatherByCoordinates = async (lat,lon) => {
+    const url = `${BASE_URL}/weather?q=${lat}&${lon}&appid=${API_KEY}&units=metric`;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
+};
 
+const renderCurrentWeather = (data) => {
     const weatherJSX = `
         <h1>${data.name}, ${data.sys.country}</h1>
         <div id="main">
@@ -41,4 +47,37 @@ const searchHandler = async () => {
     renderCurrentWeather(currentData);
 };
 
+const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else {
+     alert("Geolocation is not supported by this browser");
+    }
+  };
+  
+  const showPosition =  (position) => {
+    const { latitude,longitude } = position.coords;
+    const currentData = getCurrentWeatherByCoordinates(latitude,longitude);
+    renderCurrentWeather(currentData);
+  };
+
+  const showError = (error) => {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+       weatherContainer.innerHTML = "User denied the request for Geolocation";
+        break;
+      case error.POSITION_UNAVAILABLE:
+       weatherContainer.innerHTML = "Location information is unavailable";
+        break;
+      case error.TIMEOUT:
+       weatherContainer.innerHTML = "The request to get user location timed out";
+        break;
+      case error.UNKNOWN_ERROR:
+       weatherContainer.innerHTML = "An unknown error occurred";
+        break;
+    }
+  };
+
+
 searchButton.addEventListener("click",searchHandler);
+locationIcon.addEventListener("click",getLocation);

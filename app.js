@@ -4,12 +4,21 @@ const API_KEY = "dae9eb3d2c2c91dada0e72afd4792469";
 const searchInput = document.querySelector("input");
 const searchButton = document.querySelector("button");
 
-const searchHandler = (city) => {
+const getCurrentWeatherByName = async (city) => {
+    const url = `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
+};
+
+const searchHandler = async () => {
     const cityName = searchInput.value;
 
     if (!cityName) {
-        alert("Please enter city name!")
+        alert("Please enter city name!");
     }
-}
+    const currentData = await getCurrentWeatherByName(cityName);
+    console.log(currentData);
+};
 
-searchButton.addEventListener("click",searchHandler)
+searchButton.addEventListener("click",searchHandler);

@@ -62,7 +62,8 @@ const renderForecastWeather = (data) => {
         <p>${Math.round(item.main.temp)} °C </p>
         <span>${item.weather[0].main}</span>
       </div>
-      `;
+    `;
+    
     forecastContainer.innerHTML += forecastJsx;
   });
 };

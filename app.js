@@ -1,9 +1,12 @@
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 const API_KEY = "dae9eb3d2c2c91dada0e72afd4792469";
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 
 const searchInput = document.querySelector("input");
 const searchButton = document.querySelector("button");
 const weatherContainer = document.getElementById("weather");
+const forecastContainer = document.getElementById("forecast");
 const locationIcon = document.getElementById("location");
 
 const getCurrentWeatherByName = async (city) => {
@@ -12,6 +15,7 @@ const getCurrentWeatherByName = async (city) => {
     const json = await response.json();
     return json;
 };
+
 const getForecastWeatherByName = async (city) => {
   const url = `${BASE_URL}/forecast?q=${city}&appid=${API_KEY}&units=metric`;
   const response = await fetch(url);
@@ -27,7 +31,7 @@ const getCurrentWeatherByCoordinates = async (lat,lon) => {
 };
 
 const renderCurrentWeather = (data) => {
-    const weatherJSX = `
+    const weatherJsx = `
         <h1>${data.name}, ${data.sys.country}</h1>
         <div id="main">
             <img alt="weather icon" src="https://openweathermap.org/img/w/${data.weather[0].icon}.png" />
@@ -40,7 +44,27 @@ const renderCurrentWeather = (data) => {
         </div>
     `;
 
-    weatherContainer.innerHTML = weatherJSX;
+    weatherContainer.innerHTML = weatherJsx;
+};
+
+const getWeekDay = (date) => {
+  return DAYS[new Date(date * 1000).getDay()];
+};
+
+const renderForecastWeather = (data) => {
+  data = data.list.filter((obj) => obj.dt_txt.endsWith("12:00:00"));
+  console.log(data);
+  data.forEach((item) => {
+    const forecastJsx =`
+      <div>
+        <img alt="weather icon" src="https://openweathermap.org/img/w/${item.weather[0].icon}.png" />
+        <h3>${getWeekDay(item.dt)}</h3>
+        <p>${Math.round(item.main.temp)} °C </p>
+        <span>${item.weather[0].main}</span>
+      </div>
+      `;
+    forecastContainer.innerHTML += forecastJsx;
+  });
 };
 
 const searchHandler = async () => {
@@ -52,7 +76,7 @@ const searchHandler = async () => {
     const currentData = await getCurrentWeatherByName(cityName);
     renderCurrentWeather(currentData);
     const forecastData = await getForecastWeatherByName(cityName);
-    console.log(forecastData);
+    renderForecastWeather(forecastData);
 };
 
 const getLocation = () => {
